@@ -44,21 +44,25 @@ pharma-agent/
 ├── check_db.py               # диагностика – проверка количества чанков
 └──  requirements.txt          # зависимости
         
- flowchart TD
+## Блок-схема работы агента
+
+```mermaid
+flowchart LR
     A[Пользовательский запрос] --> B{Есть файл?}
-    B -- Да --> C[analyze_document\n(GigaChat)]
-    C --> D[file_summary\n(диагноз, возраст, лекарства, аллергии)]
+    B -- Да --> C[analyze_document\nGigaChat]
+    C --> D[file_summary\nдиагноз, возраст,\nлекарства, аллергии]
     B -- Нет --> E
     D --> E
 
-    subgraph LangGraph
-        E[Узел: summarize_query_node] --> F[Формирование поисковых терминов\n(LLM или эвристика)]
-        F --> G[Узел: retrieve_node]
-        G --> H[Поиск в ChromaDB\n(коллекция iqdoc_baseline)]
-        H --> I[Получение чанков\n(TOP_K=5)]
-        I --> J[Узел: generate_answer_node]
-        J --> K[Генерация ответа с учётом\n- резюме запроса\n- найденных чанков\n- данных эпикриза]
+    subgraph LangGraph [LangGraph граф]
+        direction LR
+        E[summarize_query_node] --> F[формирование\nsearch_terms]
+        F --> G[retrieve_node]
+        G --> H[ChromaDB поиск\nколлекция iqdoc_baseline]
+        H --> I[TOP_K=5 чанков]
+        I --> J[generate_answer_node]
+        J --> K[LLM генерация ответа\nс учётом эпикриза и чанков]
     end
 
-    K --> L[JSON-ответ\n{answer, sources, confidence}]
-    L --> M[Вывод пользователю]
+    K --> L[JSON-ответ\nanswer, sources, confidence]
+    L --> M[Вывод врачу]
