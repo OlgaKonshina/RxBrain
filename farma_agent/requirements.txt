@@ -1,0 +1,10 @@
+langchain-gigachat
+langgraph
+langchain-core
+gigachat
+chromadb
+sentence-transformers
+pandas
+requests
+python-dotenv
+typing_extensions
