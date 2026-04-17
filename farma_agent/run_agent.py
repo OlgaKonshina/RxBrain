@@ -32,11 +32,12 @@ def run_agent(user_query: str, file_path: str = None, thread_id: str = "1"):
     initial_state = {
         "messages": [
             SystemMessage(content="Ты — ассистент клинического фармаколога."),
-            HumanMessage(content=user_query)
+            HumanMessage(content=user_query),
         ],
-        "file_summary": file_summary,  # данные из эпикриза
-        "query_summary": {},  # заполнится в узле summarize
-        "retrieved_chunks": "",  # заполнится в узле retrieve
+        "file_summary": file_summary,
+        "query_summary": {},
+        "retrieved_chunks": "",
+        "retrieval_payload": {},
     }
 
     print("[INFO] Запуск графа...")
