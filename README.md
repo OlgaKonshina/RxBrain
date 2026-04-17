@@ -49,21 +49,23 @@ pharma-agent/
 ```mermaid
 flowchart LR
     A[Пользовательский запрос] --> B{Есть файл?}
-    B -- Да --> C[analyze_document\nGigaChat]
-    C --> D[file_summary\nдиагноз, возраст,\nлекарства, аллергии]
-    B -- Нет --> E
+    B -- Да --> C[analyze_document GigaChat]
+    C --> D[file_summary: диагноз, возраст, лекарства, аллергии]
+    
+    %% Соединяем ветки перед входом в subgraph
     D --> E
+    B -- Нет --> E
 
     subgraph LangGraph [LangGraph граф]
         direction LR
-        E[summarize_query_node] --> F[формирование\nsearch_terms]
+        E[summarize_query_node] --> F[формирование search_terms]
         F --> G[retrieve_node]
-        G --> H[ChromaDB поиск\nколлекция iqdoc_baseline]
+        G --> H[ChromaDB поиск: коллекция iqdoc_baseline]
         H --> I[TOP_K=5 чанков]
         I --> J[generate_answer_node]
-        J --> K[LLM генерация ответа\nс учётом эпикриза и чанков]
+        J --> K[LLM генерация ответа]
     end
 
-    K --> L[JSON-ответ\nanswer, sources, confidence]
+    K --> L[JSON-ответ: answer, sources, confidence]
     L --> M[Вывод врачу]
 ```
