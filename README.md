@@ -66,3 +66,4 @@ flowchart LR
 
     K --> L[JSON-ответ\nanswer, sources, confidence]
     L --> M[Вывод врачу]
+```
